@@ -1,0 +1,13 @@
+diff --git a/cx_Freeze/freezer.py b/cx_Freeze/freezer.py
+index 6eb0ef9..a26fde9 100644
+--- a/cx_Freeze/freezer.py
++++ b/cx_Freeze/freezer.py
+@@ -513,7 +513,7 @@ class Freezer(ABC):
+             if module.code is not None:
+                 if module.file is not None and os.path.exists(module.file):
+                     st = os.stat(module.file)
+-                    mtime = int(st.st_mtime)
++                    mtime = int(time.time())
+                     size = st.st_size & 0xFFFFFFFF
+                 else:
+                     mtime = int(time.time())
