@@ -2,6 +2,8 @@
 
 rec {
   talon = pkgs.callPackage ./pkgs/talon {};
+
+  # WIP:
   geogram = pkgs.callPackage ./pkgs/geogram {};
   ceres-solver = pkgs.callPackage ./pkgs/ceres-solver {};
   coinutils = pkgs.callPackage ./pkgs/coinutils {};
