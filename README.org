@@ -1,1 +1,1 @@
-None of these packages are working yet, except Talon.
+See [[https://github.com/nix-community/NUR][NUR]].
