@@ -1,4 +1,6 @@
 {pkgs}: {
+  audaspace = pkgs.callPackage ./pkgs/audaspace {};
+
   # See <https://github.com/nix-community/talon-nix>.
   # talon = pkgs.callPackage ./pkgs/talon {};
 
