@@ -1,6 +1,9 @@
-{pkgs}: {
+{pkgs}: let
+  # Working Blender for darwin.
+  blender = import ./pkgs/blender {inherit pkgs;};
+in {
   audaspace = pkgs.callPackage ./pkgs/audaspace {};
-
+  inherit blender;
   # See <https://github.com/nix-community/talon-nix>.
   # talon = pkgs.callPackage ./pkgs/talon {};
 
