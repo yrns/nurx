@@ -1,4 +1,4 @@
-{pkgs}: let
+{pkgs ? import <nixpkgs> {}}: let
   # Working Blender for darwin.
   blender = import ./pkgs/blender {inherit pkgs;};
 in {
