@@ -5,6 +5,7 @@ in {
   audaspace = pkgs.callPackage ./pkgs/audaspace {};
   inherit blender;
   bpy = pkgs.callPackage ./pkgs/bpy {inherit blender;};
+  bpy-bin = pkgs.python311Packages.callPackage ./pkgs/bpy-bin {};
 
   # See <https://github.com/nix-community/talon-nix>.
   # talon = pkgs.callPackage ./pkgs/talon {};
