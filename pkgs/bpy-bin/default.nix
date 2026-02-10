@@ -29,12 +29,9 @@
     in {
       name = builtins.elemAt pair 1;
       value = builtins.elemAt pair 0;
-    }) (
-      lib.strings.splitString "\n" (lib.strings.removeSuffix "\n" (builtins.readFile (fetchurl {
-        url = "https://download.blender.org/pypi/bpy/SHA256SUMS";
-        hash = "sha256-j7iWzn5BtrsM78cPDiMHhtkhZL2Y50Oii5c13PK8fzc=";
-      })))
-    ));
+    })
+    # fetchurl { url = "https://download.blender.org/pypi/bpy/SHA256SUMS"; hash = "sha256-j7iWzn5BtrsM78cPDiMHhtkhZL2Y50Oii5c13PK8fzc="; }
+    (lib.strings.splitString "\n" (lib.strings.removeSuffix "\n" (builtins.readFile ./SHA256SUMS))));
   whl = "bpy-${version}-cp311-cp311-${plat}.whl";
 in
   buildPythonPackage {
