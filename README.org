@@ -1,1 +1,2 @@
+* nurx
 See [[https://github.com/nix-community/NUR][NUR]].

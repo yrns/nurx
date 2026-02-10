@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1Ms6HyisIzIm74u93ybdSpQpCNZidMl6zfCX4evCyBE=";
   };
 
+  # TODO: are python modules for Blender?
   nativeBuildInputs = [cmake pkg-config python3Packages.setuptools];
 
   buildInputs =
