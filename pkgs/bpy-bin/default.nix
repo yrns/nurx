@@ -35,7 +35,7 @@
   whl = "bpy-${version}-cp311-cp311-${plat}.whl";
 in
   buildPythonPackage {
-    pname = "bpy";
+    pname = "bpy-bin";
     inherit version;
     format = "wheel";
 

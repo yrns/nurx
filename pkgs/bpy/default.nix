@@ -9,7 +9,7 @@
 python311Packages.buildPythonPackage {
   inherit (blender) version src patches postPatch preConfigure buildInputs pythonPath;
 
-  pname = "${blender.pname}-bpy";
+  pname = "bpy";
 
   # Blender has its own script to build a wheel.
   pyproject = false;
