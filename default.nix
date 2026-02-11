@@ -6,6 +6,7 @@ in {
   inherit blender;
   bpy = pkgs.callPackage ./pkgs/bpy {inherit blender;};
   bpy-bin = pkgs.python311Packages.callPackage ./pkgs/bpy-bin {};
+  fake-bpy-module = pkgs.python311Packages.callPackage ./pkgs/fake-bpy-module {};
 
   # See <https://github.com/nix-community/talon-nix>.
   # talon = pkgs.callPackage ./pkgs/talon {};
