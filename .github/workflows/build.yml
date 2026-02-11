@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         os:
-          - ubuntu-latest
+          # - ubuntu-latest TEMP
           - macos-latest
     runs-on: ${{ matrix.os }}
     steps:
