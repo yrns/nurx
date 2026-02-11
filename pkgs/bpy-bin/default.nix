@@ -23,7 +23,7 @@
     }
     .${
       system
-    };
+    } or (throw "Unsupported system: ${system}");
   sums = builtins.listToAttrs (map (line: let
       pair = lib.strings.splitString "  " line;
     in {
