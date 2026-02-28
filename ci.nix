@@ -12,6 +12,7 @@
 with builtins; let
   isReserved = n: n == "lib" || n == "overlays" || n == "modules";
   isDerivation = p: isAttrs p && p ? type && p.type == "derivation";
+  isAvailable = p: pkgs.lib.meta.availableOn {system = pkgs.stdenv.hostPlatform.system;} p;
   isBuildable = p: let
     licenseFromMeta = p.meta.license or [];
     licenseList =
@@ -50,7 +51,8 @@ with builtins; let
     )
   );
 in rec {
-  buildPkgs = filter isBuildable nurPkgs;
+  availPkgs = filter isAvailable nurPkgs;
+  buildPkgs = filter isBuildable availPkgs;
   cachePkgs = filter isCacheable buildPkgs;
 
   buildOutputs = concatMap outputsOf buildPkgs;
