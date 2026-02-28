@@ -52,6 +52,17 @@ in
       requests
       zstandard
     ];
+
+    meta = {
+      homepage = "https://www.blender.org";
+      description = "Blender Python module.";
+      license = blender.meta.license;
+      platforms = [
+        "aarch64-darwin"
+        "x86_64-darwin"
+        "x86_64-linux"
+      ];
+    };
   }
   // lib.mkIf stdenv.hostPlatform.isLinux {
     nativeBuildInputs = [autoPatchelfHook];
