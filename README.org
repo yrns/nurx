@@ -1,2 +1,5 @@
 * nurx
 See [[https://github.com/nix-community/NUR][NUR]].
+* packages
+** audaspace
+This is an extern for Blender (version 1.6.0 currently). There are newer versions available. Despite what the [[https://projects.blender.org/blender/blender/src/branch/main/extern/audaspace/README.blender][docs]] say in the Blender source tree, there are local modifications there.

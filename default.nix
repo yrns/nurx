@@ -2,13 +2,13 @@
   pkgs ? import <nixpkgs> { },
 }:
 let
-  # Working Blender for darwin.
-  blender = import ./pkgs/blender { inherit pkgs; };
+  # Fixed in <https://github.com/NixOS/nixpkgs/pull/509838>.
+  # blender = import ./pkgs/blender { inherit pkgs; };
 in
 {
   audaspace = pkgs.callPackage ./pkgs/audaspace { };
-  inherit blender;
-  bpy = pkgs.callPackage ./pkgs/bpy { inherit blender; };
+  # inherit blender;
+  bpy = pkgs.callPackage ./pkgs/bpy { };
   bpy-bin = pkgs.python313Packages.callPackage ./pkgs/bpy-bin { };
   fake-bpy-module = pkgs.python311Packages.callPackage ./pkgs/fake-bpy-module { };
 
