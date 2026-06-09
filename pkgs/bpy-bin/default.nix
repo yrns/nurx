@@ -2,6 +2,9 @@
   autoPatchelfHook,
   blender,
   buildPythonPackage,
+  cattrs,
+  charset-normalizer,
+  cython,
   fetchurl,
   lib,
   materialx,
@@ -53,6 +56,9 @@ buildPythonPackage {
   };
 
   propagatedBuildInputs = [
+    cattrs
+    charset-normalizer
+    cython
     materialx
     numpy
     requests
