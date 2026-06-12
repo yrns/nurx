@@ -9,9 +9,11 @@
   lib,
   materialx,
   numpy,
-  pkgs,
+  python,
   requests,
+  runCommand,
   stdenv,
+  # toPythonModule,
   zstandard,
 }:
 let
@@ -42,49 +44,82 @@ let
       (lib.strings.splitString "\n" (lib.strings.removeSuffix "\n" (builtins.readFile ./SHA256SUMS)))
   );
   whl = "bpy-${version}-cp313-cp313-${plat}.whl";
+  bpy-bin = buildPythonPackage (
+    {
+      pname = "bpy-bin";
+      inherit version;
+      format = "wheel";
+
+      # https://pypi.org/project/bpy only has the latest version
+      # https://builder.blender.org/download/bpy/ ?
+      src = fetchurl {
+        url = "https://download.blender.org/pypi/bpy/${whl}";
+        sha256 = sums.${whl};
+      };
+
+      propagatedBuildInputs = [
+        cattrs
+        charset-normalizer
+        cython
+        materialx
+        numpy
+        requests
+        zstandard
+      ];
+
+      meta = {
+        homepage = "https://builder.blender.org/download/bpy/";
+        description = "Blender Python module.";
+        license = blender.meta.license;
+        # No official build for aarch64-linux.
+        platforms = # lib.platforms.all;
+          [
+            "aarch64-darwin"
+            "x86_64-darwin"
+            "x86_64-linux"
+            "x86_64-windows"
+            "aarch64-windows"
+          ];
+        # badPlatforms = [ ];
+      };
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      nativeBuildInputs = [ autoPatchelfHook ];
+
+      # The wheel includes many libs already. We include all Blender's inputs too (minus optional ones).
+      buildInputs = # builtins.trace blender.buildInputs
+        blender.buildInputs;
+
+      # These are possibly missing optional Blender dependencies.
+      autoPatchelfIgnoreMissingDeps = [
+        "libamdhip64.so.6"
+        "libcuda.so.1"
+        "libze_loader.so.1"
+      ];
+      # autoPatchelfIgnoreMissingDeps = [ "*" ];
+    }
+  );
 in
-buildPythonPackage {
-  pname = "bpy-bin";
-  inherit version;
-  format = "wheel";
-
-  # https://pypi.org/project/bpy only has the latest version
-  # https://builder.blender.org/download/bpy/ ?
-  src = fetchurl {
-    url = "https://download.blender.org/pypi/bpy/${whl}";
-    sha256 = sums.${whl};
-  };
-
-  propagatedBuildInputs = [
-    cattrs
-    charset-normalizer
-    cython
-    materialx
-    numpy
-    requests
-    zstandard
-  ];
-
-  meta = {
-    homepage = "https://www.blender.org";
-    description = "Blender Python module.";
-    license = blender.meta.license;
-    platforms = lib.platforms.all;
-    # No official build for aarch64-linux.
-    badPlatforms = [ "aarch64-linux" ];
-  };
-}
-// lib.mkIf stdenv.hostPlatform.isLinux {
-  nativeBuildInputs = [ autoPatchelfHook ];
-
-  # The wheel includes many libs already. We include all Blender's inputs too (minus optional ones).
-  buildInputs = blender.buildInputs;
-
-  # These are possibly missing optional Blender dependencies.
-  autoPatchelfIgnoreMissingDeps = [
-    "libamdhip64.so.6"
-    "libcuda.so.1"
-    "libze_loader.so.1"
-  ];
-  # autoPatchelfIgnoreMissingDeps = [ "*" ];
-}
+# toPythonModule and/or finalAttrs causes a stack overflow. "old" attributes are just attributes, not a derivation.
+bpy-bin.overridePythonAttrs (
+  old:
+  let
+    env =
+      # assert lib.asserts.assertMsg (old.pythonModule == python) "invalid pythonModule";
+      python.withPackages (_: [ bpy-bin ]);
+  in
+  {
+    passthru = (old.passthru or { }) // {
+      tests.smoke =
+        runCommand "bpy-bin-smoke"
+          {
+            # buildInputs = [ env ];
+          }
+          ''
+            # ${lib.getExe env} -c "import sys; print(sys.path); print(sys.executable); print(sys.prefix)"
+            ${lib.getExe env} -c "import bpy"
+            touch $out
+          '';
+    };
+  }
+)
